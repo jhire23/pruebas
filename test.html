@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Feliz Cumpleaños Enyiel! 🎉</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght=500;700&display=swap');
+
+    :root {
+      --bg-color: #0d0914;
+      --card-bg: rgba(25, 18, 38, 0.85);
+      --accent-pink: #f472b6;
+      --accent-purple: #c084fc;
+      --text-color: #f8fafc;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 50% 20%, rgba(244, 114, 182, 0.15) 0px, transparent 60%),
+        radial-gradient(at 50% 80%, rgba(192, 132, 252, 0.15) 0px, transparent 60%);
+      font-family: 'Quicksand', sans-serif;
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    /* --- FASE 1: VELAS Y PASTEL --- */
+    .fase-velas {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    .fase-velas h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.2rem;
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .fase-velas p {
+      color: #a78bfa;
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+
+    /* --- PASTEL --- */
+    .cake-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 30px;
+    }
+
+    .plate {
+      width: 210px;
+      height: 14px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .cake-layer {
+      position: relative;
+      width: 170px;
+      height: 70px;
+      background: linear-gradient(to right, #f472b6, #ec4899, #f472b6);
+      border-radius: 12px 12px 4px 4px;
+      box-shadow: inset 0 -12px 0 rgba(0,0,0,0.15);
+    }
+
+    .frosting {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 25px;
+      background: #fff0f6;
+      border-radius: 12px 12px 10px 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .frosting-drips {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .drip {
+      width: 16px;
+      height: 14px;
+      background: #fff0f6;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .candles-group {
+      position: absolute;
+      top: 90px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .candle-item {
+      position: relative;
+      width: 12px;
+      height: 42px;
+      background: repeating-linear-gradient(
+        45deg,
+        #a855f7,
+        #a855f7 6px,
+        #c084fc 6px,
+        #c084fc 12px
+      );
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .candle-item::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 5px;
+      width: 2px;
+      height: 6px;
+      background: #475569;
+    }
+
+    .flame-glow {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 20px;
+      background: radial-gradient(circle, #ffe100 20%, #ff8800 70%, transparent 100%);
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 15px #ffb703, 0 0 25px #ff8800;
+      animation: flicker 0.5s infinite alternate ease-in-out;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .flame-glow.off {
+      opacity: 0;
+      transform: translateX(-50%) scale(0);
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-3deg); }
+      100% { transform: translateX(-50%) scale(1.15) rotate(3deg); }
+    }
+
+    .btn-soplar {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(244, 114, 182, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-soplar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(244, 114, 182, 0.6);
+    }
+
+    /* --- TARJETAS --- */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 35px 25px;
+      border-radius: 24px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 1s ease;
+    }
+
+    .card h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.2rem;
+      margin: 0 0 10px 0;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .message {
+      line-height: 1.7;
+      font-size: 1rem;
+      color: #e2e8f0;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 15px;
+    }
+
+    .actions-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 25px;
+    }
+
+    .gift-btn {
+      background: linear-gradient(135deg, #f59e0b, #ec4899);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .gift-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    }
+
+    /* --- FASE 3: EL REGALO --- */
+    .gift-box-container {
+      margin: 30px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .gift-box {
+      font-size: 5rem;
+      display: inline-block;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: center center;
+    }
+
+    .gift-box.shake {
+      animation: shake 0.25s ease-in-out;
+    }
+
+    .clicks-counter {
+      color: #c084fc;
+      font-weight: 700;
+      margin-top: 15px;
+      font-size: 0.95rem;
+    }
+
+    /* --- CUADRÍCULA DE REGALOS (2x2) --- */
+    .items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .grid-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .grid-item:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .grid-item img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .grid-item span {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--accent-purple);
+    }
+
+    /* --- MODAL EMERGENTE CON IMAGEN --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: #181124;
+      border: 1px solid var(--accent-purple);
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 320px;
+      width: 85%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .modal-img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-content p {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin: 0 0 20px 0;
+    }
+
+    .modal-btn {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    @keyframes shake {
+      0% { transform: scale(var(--current-scale, 1)) rotate(0deg); }
+      25% { transform: scale(var(--current-scale, 1)) rotate(-12deg); }
+      50% { transform: scale(var(--current-scale, 1)) rotate(12deg); }
+      75% { transform: scale(var(--current-scale, 1)) rotate(-12deg); }
+      100% { transform: scale(var(--current-scale, 1)) rotate(0deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FASE 1: PASTEL CON VELAS -->
+  <div class="fase-velas" id="fase1">
+    <h1>Pide un deseo ✨</h1>
+    <p>Presiona el botón para soplar las velas</p>
+
+    <div class="cake-wrapper">
+      <div class="candles-group">
+        <div class="candle-item"><div class="flame-glow"></div></div>
+        <div class="candle-item"><div class="flame-glow"></div></div>
+        <div class="candle-item"><div class="flame-glow"></div></div>
+      </div>
+      <div class="cake-layer">
+        <div class="frosting"></div>
+        <div class="frosting-drips">
+          <div class="drip"></div>
+          <div class="drip" style="height: 18px;"></div>
+          <div class="drip"></div>
+          <div class="drip" style="height: 16px;"></div>
+        </div>
+      </div>
+      <div class="plate"></div>
+    </div>
+
+    <button class="btn-soplar" onclick="soplarVelas()">Soplar velas 🌬️</button>
+  </div>
+
+  <!-- FASE 2: CARTA + CONFETI -->
+  <div class="card oculto" id="fase2">
+    <h1>¡Feliz Cumpleaños! 🎂</h1>
+    
+    <div class="message">
+      <strong>Enyiel linda,</strong><br><br>
+      Hoy es un día súper especial y no quería dejar pasar la oportunidad de prepararte algo diferente.<br><br>
+      Espero que este nuevo año te traiga muchísima felicidad, momentos increíbles y muchas sonrisas. Gracias por cada momento y cada conversación.<br><br>
+      ¡Que pases un día hermoso! <br><br>
+      <strong>— Jhire ❤</strong>
+    </div>
+
+    <div class="actions-container">
+      <button class="gift-btn" onclick="irAlRegalo()">Abrir regalo 🎁</button>
+    </div>
+  </div>
+
+  <!-- FASE 3: ZONA DEL REGALO -->
+  <div class="card oculto" id="fase3">
+    <h1 id="gift-title">Un detalle 🎁</h1>
+    <p id="gift-subtitle" style="color: #a78bfa; margin-top: 5px;">Abre tu regalo 😊</p>
+
+    <div class="gift-box-container" id="gift-container" onclick="tocarRegalo()">
+      <div class="gift-box" id="gift-box">🎁</div>
+      <div class="clicks-counter" id="clicks-info">Faltan 5 toques...</div>
+    </div>
+
+    <!-- RECOMPENSAS AL ABRIR (A, B, C, D) -->
+    <div class="oculto" id="gift-surprise">
+      <div class="items-grid">
+        <!-- Objeto A: Takis -->
+        <div class="grid-item" onclick="mostrarModal('https://via.placeholder.com/300/FF0000/FFFFFF?text=Takis+Fuego', '🔥 Unos Takis virtuales... no te los puedes comer ahorita pero te los debo 😉')">
+          <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=Takis+Fuego" alt="Takis Fuego">
+          <span>Takis Fuego</span>
+        </div>
+        
+        <!-- Objeto B: Helado / Postre -->
+        <div class="grid-item" onclick="mostrarModal('https://via.placeholder.com/300/FFB6C1/FFFFFF?text=Helado', '🍦 ¡Vale por un helado cuando nos veamos!')">
+          <img src="https://via.placeholder.com/150/FFB6C1/FFFFFF?text=Helado" alt="Helado">
+          <span>Vale especial</span>
+        </div>
+
+        <!-- Objeto C: Carro -->
+        <div class="grid-item" onclick="mostrarModal('https://via.placeholder.com/300/1E90FF/FFFFFF?text=Carraso', '🚘 ¡Anda, ya tienes un carraso! 😎')">
+          <img src="https://via.placeholder.com/150/1E90FF/FFFFFF?text=Carraso" alt="Carro">
+          <span>El carraso</span>
+        </div>
+
+        <!-- Objeto D: Foto Juntos -->
+        <div class="grid-item" onclick="mostrarModal('fotito.jpg', '📸 Tú y yo... ¿Recuerdas este momento? ✨')">
+          <img src="fotito.jpg" alt="Foto Juntos">
+          <span>Nosotros</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PARA MOSTRAR IMAGEN Y MENSAJE -->
+  <div class="modal-overlay oculto" id="custom-modal">
+    <div class="modal-content">
+      <img id="modal-img" class="modal-img" src="" alt="Vista previa">
+      <p id="modal-text"></p>
+      <button class="modal-btn" onclick="cerrarModal()">Genial ✨</button>
+    </div>
+  </div>
+
+  <script>
+    function soplarVelas() {
+      const flames = document.querySelectorAll('.flame-glow');
+      flames.forEach(flame => flame.classList.add('off'));
+
+      setTimeout(() => {
+        document.getElementById('fase1').classList.add('oculto');
+        document.getElementById('fase2').classList.remove('oculto');
+        lanzarConfeti();
+      }, 1000);
+    }
+
+    function irAlRegalo() {
+      document.getElementById('fase2').classList.add('oculto');
+      document.getElementById('fase3').classList.remove('oculto');
+    }
+
+    let clicsRestantes = 5;
+    const totalClics = 5;
+
+    function tocarRegalo() {
+      if (clicsRestantes <= 0) return;
+
+      clicsRestantes--;
+      const box = document.getElementById('gift-box');
+      const info = document.getElementById('clicks-info');
+
+      const progreso = (totalClics - clicsRestantes) / totalClics;
+      const nuevaEscala = 1 + (progreso * 0.6);
+      
+      box.style.setProperty('--current-scale', nuevaEscala);
+      box.style.transform = `scale(${nuevaEscala})`;
+
+      box.classList.remove('shake');
+      void box.offsetWidth;
+      box.classList.add('shake');
+
+      if (clicsRestantes > 0) {
+        info.textContent = `Faltan ${clicsRestantes} toque${clicsRestantes > 1 ? 's' : ''}...`;
+      } else {
+        // Revelar los 4 objetos
+        document.getElementById('gift-container').classList.add('oculto');
+        document.getElementById('gift-title').textContent = '¡Sorpresa! 🎉';
+        document.getElementById('gift-subtitle').classList.add('oculto');
+        document.getElementById('gift-surprise').classList.remove('oculto');
+        
+        lanzarConfetiEspecial();
+      }
+    }
+
+    function mostrarModal(imgSrc, mensaje) {
+      document.getElementById('modal-img').src = imgSrc;
+      document.getElementById('modal-text').textContent = mensaje;
+      document.getElementById('custom-modal').classList.remove('oculto');
+    }
+
+    function cerrarModal() {
+      document.getElementById('custom-modal').classList.add('oculto');
+    }
+
+    function lanzarConfeti() {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
+
+    function lanzarConfetiEspecial() {
+      var count = 250;
+      var defaults = { origin: { y: 0.7 } };
+
+      function fire(particleRatio, opts) {
+        confetti(Object.assign({}, defaults, opts, {
+          particleCount: Math.floor(count * particleRatio)
+        }));
+      }
+
+      fire(0.25, { spread: 26, startVelocity: 55 });
+      fire(0.2, { spread: 60 });
+      fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+      fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+      fire(0.1, { spread: 120, startVelocity: 45 });
+    }
+  </script>
+</body>
+</html>
